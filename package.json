@@ -37,10 +37,14 @@
         "vite-tsconfig-paths": "^6.1.1"
     },
     "dependencies": {
-        "@7h3laughingman/foundry-types": "~13.351",
+        "@7h3laughingman/foundry-types": "~14.360",
         "@7h3laughingman/pf2e-helpers": "~7.10",
-        "@7h3laughingman/pf2e-types": "~7.10",
+        "@7h3laughingman/pf2e-types": "~8.0",
         "remeda": "2.33.6",
         "zod": "^4.3.6"
+    },
+    "overrides": {
+        "@7h3laughingman/foundry-types": "~14.360",
+        "@7h3laughingman/pf2e-types": "~8.0"
     }
 }

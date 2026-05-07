@@ -1,7 +1,7 @@
 import { CombatantPF2e, EncounterPF2e } from "@7h3laughingman/pf2e-types";
 import { Assistant } from "assistant.ts";
 
-Hooks.on("pf2e.startTurn", (combatant: CombatantPF2e) => {
+Hooks.on("pf2e.startTurn", ((combatant: CombatantPF2e) => {
     if (combatant.token === null || combatant.actor === null) return;
 
     game.assistant.storage.process({
@@ -9,9 +9,9 @@ Hooks.on("pf2e.startTurn", (combatant: CombatantPF2e) => {
         rollOptions: combatant.actor.getRollOptions(),
         speaker: { actor: combatant.actor, token: combatant.token }
     });
-});
+}) as never);
 
-Hooks.on("pf2e.endTurn", (combatant: CombatantPF2e) => {
+Hooks.on("pf2e.endTurn", ((combatant: CombatantPF2e) => {
     if (combatant.token === null || combatant.actor === null) return;
 
     game.assistant.storage.process({
@@ -19,9 +19,9 @@ Hooks.on("pf2e.endTurn", (combatant: CombatantPF2e) => {
         rollOptions: combatant.actor.getRollOptions(),
         speaker: { actor: combatant.actor, token: combatant.token }
     });
-});
+}) as never);
 
-Hooks.on("combatStart", (encounter: EncounterPF2e) => {
+Hooks.on("combatStart", ((encounter: EncounterPF2e) => {
     for (const combatant of encounter.combatants) {
         if (combatant.token === null || combatant.actor === null) continue;
 
@@ -42,4 +42,4 @@ Hooks.on("combatStart", (encounter: EncounterPF2e) => {
 
         game.assistant.storage.process(data);
     }
-});
+}) as never);

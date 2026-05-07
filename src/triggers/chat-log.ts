@@ -6,7 +6,7 @@ Hooks.on("renderChatMessageHTML", function (message: ChatMessagePF2e, html: HTML
     for (const button of htmlQueryAll<HTMLButtonElement>(html, "button[data-action]")) {
         button.addEventListener("click", async (event) => onClickButton(message, event, html, button));
     }
-});
+} as never);
 
 async function onClickButton(
     message: ChatMessagePF2e,

@@ -1,11 +1,6 @@
+import { ChatMessageMode } from "@7h3laughingman/foundry-types/client/config.mjs";
 import { Rolled } from "@7h3laughingman/foundry-types/client/dice/roll.mjs";
-import { RollMode } from "@7h3laughingman/foundry-types/common/constants.mjs";
-import {
-    ActorUUID,
-    ChatMessageUUID,
-    ItemUUID,
-    TokenDocumentUUID
-} from "@7h3laughingman/foundry-types/common/documents/_module.mjs";
+import { ActorUUID, ItemUUID, TokenDocumentUUID } from "@7h3laughingman/foundry-types/common/documents/_module.mjs";
 import {
     ActorPF2e,
     ChatMessageFlagsPF2e,
@@ -31,6 +26,8 @@ import * as R from "remeda";
 import { Utils } from "utils.ts";
 import { ActorToken, isActorToken } from "./data.ts";
 import { AddItem, RemoveItem, UpdateCondition } from "./reroll.ts";
+
+type ChatMessageUUID = `ChatMessage.${string}`;
 
 export class Socket {
     #socket = socketlib.registerModule("pf2e-assistant")!;
@@ -458,8 +455,8 @@ export class Socket {
             modifiers?: ModifierObjectParams[];
             /** The originating item of this attack, if any */
             item?: ItemPF2e<ActorPF2e> | null;
-            /** The roll mode (i.e., 'roll', 'blindroll', etc) to use when rendering this roll. */
-            rollMode?: RollMode | "roll";
+            /** The ChatMessage visibility mode to use when rendering this roll. */
+            messageMode?: ChatMessageMode;
             /** Should the dialog be skipped */
             skipDialog?: boolean;
             /** Should this roll be rolled twice? If so, should it keep highest or lowest? */
@@ -490,7 +487,7 @@ export class Socket {
                 extraRollOptions: args.extraRollOptions,
                 modifiers: args.modifiers,
                 item: args.item?.uuid,
-                rollMode: args.rollMode,
+                messageMode: args.messageMode,
                 skipDialog: args.skipDialog,
                 rollTwice: args.rollTwice,
                 traits: args.traits,
@@ -516,7 +513,7 @@ export class Socket {
             extraRollOptions: args.extraRollOptions,
             modifiers: args.modifiers?.map((value) => new game.pf2e.Modifier(value)),
             item: args.item,
-            rollMode: args.rollMode,
+            messageMode: args.messageMode,
             skipDialog: args.skipDialog,
             rollTwice: args.rollTwice,
             traits: args.traits,
@@ -558,8 +555,8 @@ export class Socket {
             modifiers?: ModifierObjectParams[];
             /** The originating item of this attack, if any */
             item?: ItemUUID | null;
-            /** The roll mode (i.e., 'roll', 'blindroll', etc) to use when rendering this roll. */
-            rollMode?: RollMode | "roll";
+            /** The ChatMessage visibility mode to use when rendering this roll. */
+            messageMode?: ChatMessageMode;
             /** Should the dialog be skipped */
             skipDialog?: boolean;
             /** Should this roll be rolled twice? If so, should it keep highest or lowest? */
@@ -592,7 +589,7 @@ export class Socket {
             extraRollOptions: args.extraRollOptions,
             modifiers: args.modifiers,
             item: args.item ? ((await fromUuid<ItemPF2e<ActorPF2e>>(args.item)) ?? undefined) : undefined,
-            rollMode: args.rollMode,
+            messageMode: args.messageMode,
             skipDialog: args.skipDialog,
             rollTwice: args.rollTwice,
             traits: args.traits,
@@ -623,9 +620,11 @@ export class Socket {
             await this.#socket.executeAsGM("updateChatMessage", chatMessage.uuid, tokenId, reroll);
         }
 
-        this.#updateQueue.add(chatMessage.update.bind(chatMessage), {
-            flags: { "pf2e-assistant": { process: false, reroll: { [tokenId]: reroll } } }
-        });
+        this.#updateQueue.add(() =>
+            chatMessage.update({
+                flags: { "pf2e-assistant": { process: false, reroll: { [tokenId]: reroll } } }
+            })
+        );
     }
 
     async #updateChatMessage(chatMessageUuid: ChatMessageUUID, tokenId: string, reroll: Assistant.Reroll) {
@@ -694,7 +693,7 @@ export class Socket {
                 .map((user) => user.id)
         });
 
-        return chatMessage ? [chatMessage.uuid] : [];
+        return chatMessage ? [chatMessage.uuid as ChatMessageUUID] : [];
     }
 
     async #promptChoice(

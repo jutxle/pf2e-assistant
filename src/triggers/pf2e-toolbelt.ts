@@ -53,7 +53,7 @@ Hooks.on("pf2e-toolbelt.rollSave", function (args: RollSaveHook) {
     processToolbelt(args.message, args.roll, args.target, args.data)
         .then((value) => game.assistant.storage.process(value))
         .then((value) => processReroll(value.data, value.reroll));
-});
+} as never);
 
 Hooks.on("pf2e-toolbelt.rerollSave", function (args: RerollSaveHook) {
     const reroll = R.prop(args.message.flags, "pf2e-assistant", "reroll") as Maybe<Record<string, Assistant.Reroll>>;
@@ -67,7 +67,7 @@ Hooks.on("pf2e-toolbelt.rerollSave", function (args: RerollSaveHook) {
             .then((value) => game.assistant.storage.process(value))
             .then((value) => processReroll(value.data, value.reroll));
     }
-});
+} as never);
 
 async function processToolbelt(
     message: ChatMessagePF2e,

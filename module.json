@@ -13,9 +13,9 @@
     ],
     "socket": true,
     "compatibility": {
-        "minimum": "13.348",
-        "verified": "13.351",
-        "maximum": "13"
+        "minimum": "14.360",
+        "verified": "14.360",
+        "maximum": "14"
     },
     "esmodules": ["dist/pf2e-assistant.js"],
     "relationships": {
@@ -35,17 +35,17 @@
             {
                 "id": "pf2e",
                 "type": "system",
-                "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/v13-dev/system.pf2e.json",
+                "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/v14-dev/system.pf2e.json",
                 "compatibility": {
-                    "minimum": "7.10.1"
+                    "minimum": "8.1.1"
                 }
             },
             {
                 "id": "sf2e",
                 "type": "system",
-                "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/v13-dev/system.sf2e.json",
+                "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/v14-dev/system.sf2e.json",
                 "compatibility": {
-                    "minimum": "0.0.4"
+                    "minimum": "1.1.1"
                 }
             }
         ]

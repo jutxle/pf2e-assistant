@@ -1,6 +1,6 @@
 import { ItemPF2e } from "@7h3laughingman/pf2e-types";
 
-Hooks.on("createItem", (item: ItemPF2e) => {
+Hooks.on("createItem", ((item: ItemPF2e) => {
     if (!(item.isOfType("effect") || item.isOfType("condition"))) return;
     if (!item.actor) return;
     const tokens = item.actor.getActiveTokens(true, true);
@@ -11,9 +11,9 @@ Hooks.on("createItem", (item: ItemPF2e) => {
         rollOptions: [...item.actor.getRollOptions(), ...item.getRollOptions("item")],
         speaker: { actor: item.actor, token: tokens[0] }
     });
-});
+}) as never);
 
-Hooks.on("deleteItem", (item: ItemPF2e) => {
+Hooks.on("deleteItem", ((item: ItemPF2e) => {
     if (!(item.isOfType("effect") || item.isOfType("condition"))) return;
     if (!item.actor) return;
     const tokens = item.actor.getActiveTokens(true, true);
@@ -24,4 +24,4 @@ Hooks.on("deleteItem", (item: ItemPF2e) => {
         rollOptions: [...item.actor.getRollOptions(), ...item.getRollOptions("item")],
         speaker: { actor: item.actor, token: tokens[0] }
     });
-});
+}) as never);
