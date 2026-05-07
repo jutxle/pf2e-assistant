@@ -9,7 +9,10 @@ const createChatMessage = Hooks.on("createChatMessage", function (chatMessage: C
 
     processChatMessage(chatMessage)
         .then((data) => game.assistant.storage.process(data))
-        .then(({ data, reroll }) => processReroll(data, reroll));
+        .then(({ data, reroll }) => processReroll(data, reroll))
+        .catch((reason) => {
+            if (reason !== "Undefined Trigger") throw reason;
+        });
 } as never);
 
 async function processChatMessage(chatMessage: ChatMessagePF2e): Promise<Assistant.Data> {
